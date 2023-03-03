@@ -13,7 +13,7 @@ class TestThree(unittest.TestCase):
     def test_player_can_lose_if_he_makes_the_wrong_bet(self):
         player_Alex = Player()
         player_Bob = Player()
-        game = Game()
+        game = Game("onedice")
         game.add_player(player_Alex)
         game.add_player(player_Bob)
         player_Alex.buy_chips(300)
@@ -30,7 +30,7 @@ class TestThree(unittest.TestCase):
 
     def test_player_can_win_six_bets(self):
         player_Alex = Player()
-        game = Game()
+        game = Game("onedice")
         game.add_player(player_Alex)
         chips_to_buy = 600
         player_Alex.buy_chips(chips_to_buy)
@@ -43,7 +43,7 @@ class TestThree(unittest.TestCase):
 
     def test_casino_receives_the_chips_that_the_player_lost(self):
         player_Alex = Player()
-        game = Game()
+        game = Game("onedice")
         game.add_player(player_Alex)
         chips_to_buy = 600
         player_Alex.buy_chips(chips_to_buy)
@@ -55,7 +55,7 @@ class TestThree(unittest.TestCase):
 
     def test_player_can_make_several_bets_on_different_numbers_and_win_on_those_that_won(self):
         player_Alex = Player()
-        game = Game()
+        game = Game("onedice")
         game.add_player(player_Alex)
         chips_to_buy = 600
         player_Alex.buy_chips(chips_to_buy)

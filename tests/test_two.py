@@ -1,5 +1,6 @@
 # Упражнение 2. Ставки
 # Я, как игрок, могу купить фишки у казино, чтобы делать ставки
+# Я, как игрок, не могу купить количество фишек меньше нуля
 # Я, как игрок, могу сделать ставку в игре в кости, чтобы выиграть
 # Я, как игрок, не могу поставить фишек больше, чем я купил
 # Я, как игрок, могу сделать несколько ставок на разные числа, чтобы повысить вероятность выигрыша
@@ -20,9 +21,16 @@ class TestTwo(unittest.TestCase):
 
         self.assertEqual(chips_to_buy, player_Alex.get_chips(), "The player could not buy the right amount of chips")
 
-    def test_player_can_bet_in_game_of_dice(self):
+    def test_player_cannot_buy_negative_amount_of_chips(self):
         player_Alex = Player()
-        game = Game()
+        chips_to_buy = -1
+
+        with self.assertRaises(Exception):
+            player_Alex.buy_chips(chips_to_buy)
+
+    def test_player_can_bet_in_game_of_onedice(self):
+        player_Alex = Player()
+        game = Game("onedice")
         game.add_player(player_Alex)
         chips_to_bet = 200
         player_Alex.buy_chips(chips_to_bet)
@@ -36,7 +44,7 @@ class TestTwo(unittest.TestCase):
 
     def test_player_can_not_bet_more_chips_than_he_bought(self):
         player_Alex = Player()
-        game = Game()
+        game = Game("onedice")
         game.add_player(player_Alex)
         chips_to_buy = 200
         player_Alex.buy_chips(chips_to_buy)
@@ -49,7 +57,7 @@ class TestTwo(unittest.TestCase):
 
     def test_player_can_bet_on_different_numbers(self):
         player_Alex = Player()
-        game = Game()
+        game = Game("onedice")
         game.add_player(player_Alex)
         chips_to_buy = 400
         player_Alex.buy_chips(chips_to_buy)
@@ -63,7 +71,7 @@ class TestTwo(unittest.TestCase):
 
     def test_casino_only_accepts_bets_in_multiples_of_five(self):
         player_Alex = Player()
-        game = Game()
+        game = Game("onedice")
         game.add_player(player_Alex)
         chips_to_buy = 400
         player_Alex.buy_chips(chips_to_buy)
@@ -76,7 +84,7 @@ class TestTwo(unittest.TestCase):
 
     def test_player_can_bet_on_numbers_from_one_to_six(self):
         player_Alex = Player()
-        game = Game()
+        game = Game("onedice")
         game.add_player(player_Alex)
         chips_to_buy = 400
         player_Alex.buy_chips(chips_to_buy)
@@ -85,4 +93,4 @@ class TestTwo(unittest.TestCase):
             player_Alex.bet(100, 7)
 
         with self.assertRaises(Exception):
-            player_Alex.bet(100, 89)
+            player_Alex.bet(100, 0)
