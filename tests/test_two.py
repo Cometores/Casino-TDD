@@ -9,7 +9,7 @@
 
 import unittest
 
-from casino.casino import Player, Game
+from casino.casino import Player, Game, InvalidChipsAmountException, InvalidBetException
 
 
 class TestTwo(unittest.TestCase):
@@ -25,7 +25,7 @@ class TestTwo(unittest.TestCase):
         player_Alex = Player()
         chips_to_buy = -1
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(InvalidChipsAmountException):
             player_Alex.buy_chips(chips_to_buy)
 
     def test_player_can_bet_in_game_of_onedice(self):
@@ -49,10 +49,7 @@ class TestTwo(unittest.TestCase):
         chips_to_buy = 200
         player_Alex.buy_chips(chips_to_buy)
 
-        with self.assertRaises(Exception):
-            player_Alex.bet(300, 5)
-
-        with self.assertRaises(Exception):
+        with self.assertRaises(InvalidBetException):
             player_Alex.bet(300, 5)
 
     def test_player_can_bet_on_different_numbers(self):
@@ -76,10 +73,10 @@ class TestTwo(unittest.TestCase):
         chips_to_buy = 400
         player_Alex.buy_chips(chips_to_buy)
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(InvalidBetException):
             player_Alex.bet(1, 1)
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(InvalidBetException):
             player_Alex.bet(12, 5)
 
     def test_player_can_bet_on_numbers_from_one_to_six(self):
@@ -89,8 +86,8 @@ class TestTwo(unittest.TestCase):
         chips_to_buy = 400
         player_Alex.buy_chips(chips_to_buy)
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(InvalidBetException):
             player_Alex.bet(100, 7)
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(InvalidBetException):
             player_Alex.bet(100, 0)

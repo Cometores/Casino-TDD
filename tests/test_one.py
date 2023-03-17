@@ -8,7 +8,7 @@
 
 import unittest
 
-from casino.casino import Player, Game
+from casino.casino import Player, Game, PlayerEnteringGameException, PlayerLeavingGameException
 
 
 class TestOne(unittest.TestCase):
@@ -38,7 +38,14 @@ class TestOne(unittest.TestCase):
 
         game1.add_player(player)
 
-        self.assertRaises(Exception, game2.add_player, player)
+        self.assertRaises(PlayerEnteringGameException, game2.add_player, player)
+
+    def test_player_cannot_leave_the_game_he_was_not_playing(self):
+        player = Player()
+        game = Game("onedice")
+
+        with self.assertRaises(PlayerLeavingGameException):
+            game.remove_player(player)
 
     def test_players_can_play_different_games(self):
         player2 = Player()
@@ -68,9 +75,4 @@ class TestOne(unittest.TestCase):
     def test_player_cannot_enter_game_twice(self):
         pass
 
-    def test_player_cannot_leave_the_game_he_was_not_playing(self):
-        player = Player()
-        game = Game("onedice")
 
-        with self.assertRaises(Exception):
-            game.remove_player(player)

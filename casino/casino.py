@@ -1,5 +1,20 @@
 import random
 
+class InvalidChipsAmountException(Exception):
+    """Raised when a player tries to buy a negative number of chips"""
+    def __init__(self, message="Cannot buy a negative number of chips"):
+        super().__init__(message)
+
+class InvalidBetException(Exception):
+    pass
+
+class PlayerEnteringGameException(Exception):
+    """Raised when the player is already in this game or another."""
+    pass
+
+class PlayerLeavingGameException(Exception):
+    """Raised when a player tries to leave a game in which he is not"""
+    pass
 
 class Player:
     def __init__(self):
@@ -11,12 +26,12 @@ class Player:
 
     def buy_chips(self, chips_to_buy: int):
         if chips_to_buy < 0:
-            raise Exception
+            raise InvalidChipsAmountException
         self.__chips = chips_to_buy
 
     def bet(self, chips_to_bet: int, bet_number: int):
         if not self.in_game or chips_to_bet > self.__chips or chips_to_bet % 5:
-            raise Exception
+            raise InvalidBetException
 
         if self.game_type == "onedice":
             self.bet_one_dice(chips_to_bet, bet_number)
@@ -25,13 +40,13 @@ class Player:
 
     def bet_one_dice(self, chips_to_bet: int, bet_number: int):
         if bet_number > 6 or 1 > bet_number:
-            raise Exception
+            raise InvalidBetException
         self.__chips -= chips_to_bet
         self.bets_onedice_list[bet_number - 1] += chips_to_bet
 
     def bet_two_dice(self, chips_to_bet: int, bet_number: int):
         if bet_number > 12 or bet_number < 2:
-            raise Exception
+            raise InvalidBetException
         self.__chips -= chips_to_bet
         self.bets_twodice_list[bet_number - 2] += chips_to_bet
 
@@ -40,7 +55,7 @@ class Player:
             return self.bets_onedice_list[bet_number - 1]
         elif self.game_type == "twodice" and 12 >= bet_number >= 2:
             return self.bets_twodice_list[bet_number - 1]
-        raise Exception
+        raise InvalidBetException
 
     def get_chips(self):
         return self.__chips
@@ -63,12 +78,15 @@ class Game:
             player.in_game = True
             player.game_type = self.game_type
         else:
-            raise Exception()
+            raise PlayerEnteringGameException()
 
     def remove_player(self, player: Player):
-        self.players_list.remove(player)
-        player.in_game = False
-        player.in_game = ""
+        if player in self.players_list:
+            self.players_list.remove(player)
+            player.in_game = False
+            player.in_game = ""
+        else:
+            raise PlayerLeavingGameException
 
     def play(self, predefined: list[int] = None):
         if self.game_type == "onedice":
